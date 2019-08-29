@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navCats"
+    app:startDestination="@id/catsFragment">
+
+    <fragment
+        android:id="@+id/catsFragment"
+        android:name="com.test.testcatsapp.ui.cats.all.CatsFragment"
+        android:label="All">
+
+        <action
+            android:id="@+id/actionCatPhoto"
+            app:destination="@id/catPhoto" />
+
+        <argument
+            android:name="photoUrl"
+            android:defaultValue="@null"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/catPhoto"
+        android:name="com.test.testcatsapp.ui.cats.photo.CatPhotoFragment"
+        android:label="CatPhoto" />
+
+</navigation>

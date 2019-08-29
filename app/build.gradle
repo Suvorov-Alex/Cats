@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        applicationId "com.test.catsapp"
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_BASE_URL", "\"https://api.thecatapi.com/\""
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_BASE_URL", "\"https://api.thecatapi.com/\""
+        }
+    }
+    compileOptions {
+        sourceCompatibility javaVersion
+        targetCompatibility javaVersion
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation kotlinLib
+
+    implementation androidCore
+    implementation androidCoreKtx
+    implementation androidAppcompat
+    implementation androidRecyclerView
+    implementation androidCardView
+    implementation constraintLayout
+
+    implementation navigationFragmentKtx
+    implementation navigationUiKtx
+
+    implementation okhttp
+    implementation okhttpLogger
+
+    implementation retrofit
+    implementation retrofitRx
+    implementation retrofitGson
+
+    implementation gson
+
+    implementation rxJava
+    implementation rxKotlin
+    implementation rxRelay
+    implementation rxAndroid
+
+    implementation roomRuntime
+    implementation roomRx
+    kapt roomCompiler
+
+    implementation dagger
+    implementation daggerSupport
+    kapt daggerAnnotationProcessor
+    kapt daggerCompiler
+
+    implementation glide
+    kapt glideAnnotationProcessor
+}
