@@ -1,9 +1,7 @@
 package com.test.testcatsapp.di.component
 
 import com.test.testcatsapp.CatsApp
-import com.test.testcatsapp.di.module.ActivityModule
-import com.test.testcatsapp.di.module.AppModule
-import com.test.testcatsapp.di.module.FragmentModule
+import com.test.testcatsapp.di.module.*
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -15,7 +13,12 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         AppModule::class,
         ActivityModule::class,
-        FragmentModule::class
+        FragmentModule::class,
+        NetworkModule::class,
+        DatabaseModule::class,
+        RepositoryModule::class,
+        CatsModule::class,
+        FavoriteCatsModule::class
     ]
 )
 interface AppComponent : AndroidInjector<CatsApp> {
