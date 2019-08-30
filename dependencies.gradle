@@ -6,7 +6,6 @@ ext {
 
     kotlinVersion = "1.3.50"
     javaVersion = JavaVersion.VERSION_1_8
-    okhttpVersion = "4.1.0"
 
     kotlinLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
