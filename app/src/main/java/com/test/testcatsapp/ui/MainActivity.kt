@@ -2,97 +2,83 @@ package com.test.testcatsapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.test.testcatsapp.R
-import com.test.testcatsapp.ui.cats.BaseFragment
+import com.test.testcatsapp.ui.cats.photo.CatPhotoFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    private val navController by lazy { findNavController(R.id.catsNavHost) }
 
-    private val backStack = Stack<Int>()
-
-    private val fragments = listOf(
-        BaseFragment.newInstance(R.layout.content_cats_base, R.id.catsNavHost),
-        BaseFragment.newInstance(R.layout.content_favorite_cats_base, R.id.favoriteCatsNavHost)
-    )
-
-    private val indexToPage = mapOf(0 to R.id.catsMenuItem, 1 to R.id.favoriteCatsMenuItem)
-
-    private val onPageChangeListener = object : ViewPager.OnPageChangeListener {
-        override fun onPageScrollStateChanged(state: Int) {}
-        override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {}
-        override fun onPageSelected(page: Int) {
-            val itemId = indexToPage[page] ?: R.id.home
-            if (mainBottomNavigationView.selectedItemId != itemId) {
-                mainBottomNavigationView.selectedItemId = itemId
-            }
-        }
-    }
-
-    private val onNavigationItemReselectedListener =
-        BottomNavigationView.OnNavigationItemReselectedListener { item ->
-            val position = indexToPage.values.indexOf(item.itemId)
-            val fragment = fragments[position]
-            fragment.popToRoot()
-        }
-
-    private val onNavigationItemSelectedListener =
-        BottomNavigationView.OnNavigationItemSelectedListener { item ->
-            val position = indexToPage.values.indexOf(item.itemId)
-            if (mainViewPager.currentItem != position) {
-                setItem(position)
-            }
-            true
-        }
-
+    private var skipItemSelectAction = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainViewPager.apply {
-
-            addOnPageChangeListener(onPageChangeListener)
-            adapter = ViewPagerAdapter()
+        mainBottomNavigationView.setupWithNavController(navController)
+        mainBottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            if (!skipItemSelectAction) {
+                when (navController.currentDestination?.id) {
+                    R.id.catsFragment -> {
+                        // Cond to prevent incorrect self navigation
+                        if (menuItem.itemId == R.id.favoriteCatsMenuItem) {
+                            navigateFromCatsToFavoriteCats()
+                        }
+                    }
+                    R.id.favoriteCatsFragment -> {
+                        // Cond to prevent incorrect self navigation
+                        if (menuItem.itemId == R.id.catsMenuItem) {
+                            navigateFromFavoriteCatsToCats()
+                        }
+                    }
+                    R.id.catPhotoFragment -> navigateFromCatPhotoToFavoriteCats()
+                    com.test.testcatsapp.R.id.favoriteCatPhotoFragment -> navigateFromFavoriteCatPhotoToCats()
+                }
+            } else {
+                skipItemSelectAction = false
+            }
+            true
         }
+    }
 
-        mainBottomNavigationView.apply {
-            setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-            setOnNavigationItemReselectedListener(onNavigationItemReselectedListener)
-        }
-
-        if (backStack.empty()) {
-            backStack.push(0)
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val fragments = supportFragmentManager.fragments
+        for (fragment in fragments) {
+            if (fragment is CatPhotoFragment) {
+                fragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            }
         }
     }
 
     override fun onBackPressed() {
-        val fragment = fragments[mainViewPager.currentItem]
-        val hasNestedFragments = fragment.popBackStack()
-        if (!hasNestedFragments) {
-            if (backStack.size > 1) {
-                backStack.pop()
-                mainViewPager.currentItem = backStack.peek()
-                return
+        when (navController.currentDestination?.id) {
+            R.id.catsFragment -> finish()
+            R.id.favoriteCatsFragment -> {
+                navController.popBackStack()
+                // Skip OnNavigationItemSelectedListener call to prevent already completed navigation
+                skipItemSelectAction = true
+                mainBottomNavigationView.selectedItemId = R.id.catsMenuItem
             }
-            super.onBackPressed()
+            else -> super.onBackPressed()
         }
     }
 
-    private fun setItem(position: Int) {
-        mainViewPager.currentItem = position
-        backStack.push(position)
-    }
+    private fun navigateFromCatsToFavoriteCats() =
+        navController.navigate(R.id.action_from_cats_to_favorite_cats)
 
-    inner class ViewPagerAdapter : FragmentPagerAdapter(
-        supportFragmentManager,
-        BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
-    ) {
-        override fun getItem(position: Int): Fragment = fragments[position]
-        override fun getCount(): Int = fragments.size
-    }
+    private fun navigateFromFavoriteCatsToCats() =
+        navController.navigate(R.id.action_from_favorite_cats_to_cats)
+
+    private fun navigateFromCatPhotoToFavoriteCats() =
+        navController.navigate(R.id.action_from_cat_photo_to_favorite_cats)
+
+    private fun navigateFromFavoriteCatPhotoToCats() =
+        navController.navigate(R.id.action_from_favorite_cat_photo_to_cats)
 }

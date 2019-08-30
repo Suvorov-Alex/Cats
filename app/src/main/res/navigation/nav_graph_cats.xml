@@ -10,19 +10,60 @@
         android:label="All">
 
         <action
-            android:id="@+id/actionCatPhoto"
-            app:destination="@id/catPhoto" />
+            android:id="@+id/action_from_cats_to_cat_photo"
+            app:destination="@id/catPhotoFragment">
+            <argument
+                android:name="photoUrl"
+                android:defaultValue="@null"
+                app:argType="string" />
+        </action>
 
-        <argument
-            android:name="photoUrl"
-            android:defaultValue="@null"
-            app:argType="string" />
+        <action
+            android:id="@+id/action_from_cats_to_favorite_cats"
+            app:destination="@id/favoriteCatsFragment" />
 
     </fragment>
 
     <fragment
-        android:id="@+id/catPhoto"
+        android:id="@+id/catPhotoFragment"
         android:name="com.test.testcatsapp.ui.cats.photo.CatPhotoFragment"
-        android:label="CatPhoto" />
+        android:label="CatPhoto">
+
+        <action
+            android:id="@+id/action_from_cat_photo_to_favorite_cats"
+            app:destination="@id/favoriteCatsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/favoriteCatsFragment"
+        android:name="com.test.testcatsapp.ui.cats.favorite.FavoriteCatsFragment"
+        android:label="All">
+
+        <action
+            android:id="@+id/action_from_favorite_cats_to_favorite_cat_photo"
+            app:destination="@id/favoriteCatPhotoFragment">
+            <argument
+                android:name="photoUrl"
+                android:defaultValue="@null"
+                app:argType="string" />
+        </action>
+
+        <action
+            android:id="@+id/action_from_favorite_cats_to_cats"
+            app:destination="@id/catsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/favoriteCatPhotoFragment"
+        android:name="com.test.testcatsapp.ui.cats.photo.CatPhotoFragment"
+        android:label="FavoriteCatPhoto">
+
+        <action
+            android:id="@+id/action_from_favorite_cat_photo_to_cats"
+            app:destination="@id/catsFragment" />
+
+    </fragment>
 
 </navigation>
