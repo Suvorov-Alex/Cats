@@ -18,7 +18,8 @@ import javax.inject.Singleton
         DatabaseModule::class,
         RepositoryModule::class,
         CatsModule::class,
-        FavoriteCatsModule::class
+        FavoriteCatsModule::class,
+        CatPhotoModule::class
     ]
 )
 interface AppComponent : AndroidInjector<CatsApp> {

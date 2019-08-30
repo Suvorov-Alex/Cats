@@ -3,4 +3,21 @@
 
     <string name="menu_item_all">All</string>
     <string name="menu_item_favorite">Favorite</string>
+
+    <string name="cats_view_save_to_favorite_toast">Cat saved to favorites</string>
+
+    <string name="cats_view_placeholder_empty">No cats here</string>
+    <string name="cats_view_placeholder_error">Sorry, the error occurs\nplease refresh data</string>
+
+    <string name="cats_full_image_view_download">Download</string>
+
+    <string name="favorite_cats_view_placeholder_empty">No favorite cats, choose your favorite cat from All cats</string>
+
+    <string name="favorite_cats_delete_cat">Cat removed from favorites</string>
+    <string name="favorite_cats_delete_cat_undo">Undo</string>
+
+    <string name="cat_photo_permission_error">Please enable \'Write external storage\' permission in the system settings</string>
+    <string name="cat_photo_download_success">Cat photo successfully saved in downloads</string>
+    <string name="cat_photo_download_error">Sorry, the error occurs\nplease try to download photo again</string>
 </resources>
+

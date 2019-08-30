@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.test.testcatsapp.R
-import com.test.testcatsapp.ui.cats.photo.CatPhotoFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -34,26 +33,12 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     R.id.catPhotoFragment -> navigateFromCatPhotoToFavoriteCats()
-                    com.test.testcatsapp.R.id.favoriteCatPhotoFragment -> navigateFromFavoriteCatPhotoToCats()
+                    R.id.favoriteCatPhotoFragment -> navigateFromFavoriteCatPhotoToCats()
                 }
             } else {
                 skipItemSelectAction = false
             }
             true
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        val fragments = supportFragmentManager.fragments
-        for (fragment in fragments) {
-            if (fragment is CatPhotoFragment) {
-                fragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
-            }
         }
     }
 
