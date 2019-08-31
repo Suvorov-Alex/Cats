@@ -28,7 +28,7 @@ interface FavoriteCats {
         fun unbind()
 
         fun onCatClicked(cat: Cat)
-        fun onCatLongClicked(cat: Cat): Boolean
+        fun onCatLongClicked(cat: Cat)
         fun onUndoDeleteCatClicked(cat: Cat)
     }
 }

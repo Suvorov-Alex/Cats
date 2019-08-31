@@ -36,6 +36,10 @@ class FavoriteCatsPresenter(
 
     @SuppressLint("CheckResult")
     override fun onCatClicked(cat: Cat) {
+        view?.showFullImage(cat.imageUrl)
+    }
+
+    override fun onCatLongClicked(cat: Cat) {
         model
             .deleteCatFromFavorite(cat)
             .subscribeOn(Schedulers.io())
@@ -44,11 +48,6 @@ class FavoriteCatsPresenter(
                 { view?.showUndoDeleteCatSnackbar(cat) },
                 { error -> Log.d(TAG, error.message) }
             )
-    }
-
-    override fun onCatLongClicked(cat: Cat): Boolean {
-        view?.showFullImage(cat.imageUrl)
-        return true
     }
 
     @SuppressLint("CheckResult")

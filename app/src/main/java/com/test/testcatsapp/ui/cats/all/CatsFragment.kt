@@ -38,7 +38,7 @@ class CatsFragment : DaggerFragment(), Cats.View {
         presenter.bind(this)
 
         catsRefreshView.setOnRefreshListener { presenter.onRefresh() }
-        catsAdapter = CatsAdapter(glide, dataSource, presenter::onCatClicked, presenter::onCatLongClicked)
+        catsAdapter = CatsAdapter(glide, dataSource, presenter::onCatClicked) { cat -> presenter.onCatLongClicked(cat); true }
         catsView.adapter = catsAdapter
     }
 

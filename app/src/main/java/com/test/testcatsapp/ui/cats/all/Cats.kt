@@ -30,7 +30,7 @@ interface Cats {
         fun unbind()
 
         fun onCatClicked(cat: Cat)
-        fun onCatLongClicked(cat: Cat): Boolean
+        fun onCatLongClicked(cat: Cat)
         fun onRefresh()
     }
 }

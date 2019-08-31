@@ -37,6 +37,10 @@ class CatsPresenter(
 
     @SuppressLint("CheckResult")
     override fun onCatClicked(cat: Cat) {
+        view?.showFullImage(cat.imageUrl)
+    }
+
+    override fun onCatLongClicked(cat: Cat) {
         model
             .setCatFavorite(cat)
             .subscribeOn(Schedulers.io())
@@ -45,11 +49,6 @@ class CatsPresenter(
                 { view?.showToast(R.string.cats_view_save_to_favorite_toast) },
                 { error -> Log.d(TAG, error.message) }
             )
-    }
-
-    override fun onCatLongClicked(cat: Cat): Boolean {
-        view?.showFullImage(cat.imageUrl)
-        return true
     }
 
     override fun onRefresh() {

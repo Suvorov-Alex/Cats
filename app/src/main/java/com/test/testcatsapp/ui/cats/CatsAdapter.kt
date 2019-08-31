@@ -46,7 +46,6 @@ class CatsAdapter(
 
             glide
                 .load(cat.imageUrl)
-                .placeholder(R.drawable.image_placeholder_150)
                 .centerCrop()
                 .into(itemView.catImageView)
         }

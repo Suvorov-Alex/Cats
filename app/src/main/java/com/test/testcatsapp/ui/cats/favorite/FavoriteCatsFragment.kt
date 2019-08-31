@@ -37,7 +37,7 @@ class FavoriteCatsFragment : DaggerFragment(), FavoriteCats.View {
 
         presenter.bind(this)
 
-        catsAdapter = CatsAdapter(glide, dataSource, presenter::onCatClicked, presenter::onCatLongClicked)
+        catsAdapter = CatsAdapter(glide, dataSource, presenter::onCatClicked) { cat -> presenter.onCatLongClicked(cat); true }
         favoriteCatsView.adapter = catsAdapter
     }
 
