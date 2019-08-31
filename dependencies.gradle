@@ -9,7 +9,7 @@ ext {
 
     kotlinLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    androidGradlePlugin = "com.android.tools.build:gradle:3.6.0-alpha08"
+    androidGradlePlugin = "com.android.tools.build:gradle:3.6.0-alpha09"
     kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
     androidCore = "androidx.core:core:1.2.0-alpha03"
