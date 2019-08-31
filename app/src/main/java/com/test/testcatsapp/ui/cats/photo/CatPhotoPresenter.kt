@@ -41,6 +41,16 @@ class CatPhotoPresenter(
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == PERMISSIONS_WRITE_EXTERNAL_STORAGE_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
+                fullPhoto?.let { model.savePhoto(it).onPhotoSavingStatusReceived() }
+            } else {
+                view?.showToast(R.string.cat_photo_permission_error)
+            }
+        }
+    }
+
     private fun CatPhoto.SavingStatus.onPhotoSavingStatusReceived() =
         when (this) {
             is CatPhoto.SavingStatus.Success -> {

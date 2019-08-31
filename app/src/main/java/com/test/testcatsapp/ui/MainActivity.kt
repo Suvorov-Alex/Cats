@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.test.testcatsapp.R
+import com.test.testcatsapp.ui.cats.photo.CatPhotoFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -52,6 +53,14 @@ class MainActivity : AppCompatActivity() {
                 mainBottomNavigationView.selectedItemId = R.id.catsMenuItem
             }
             else -> super.onBackPressed()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val topFragment = supportFragmentManager.findFragmentById(R.id.catsNavHost)?.childFragmentManager?.fragments?.get(0)
+        if (topFragment is CatPhotoFragment) {
+            topFragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
 

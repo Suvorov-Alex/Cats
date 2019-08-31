@@ -17,7 +17,10 @@ interface CatPhoto {
     interface Presenter {
         fun bind(view: View)
         fun unbind()
+
         fun onDownloadViewClicked(drawable: Drawable?)
+
+        fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
     }
 
     sealed class SavingStatus {

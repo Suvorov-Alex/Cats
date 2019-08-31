@@ -37,6 +37,11 @@ class CatPhotoFragment : DaggerFragment(), CatPhoto.View {
         catPhotoDownloadView.setOnClickListener { presenter.onDownloadViewClicked(catPhotoView.drawable) }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        presenter.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     override fun showToast(message: Int) =
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 
