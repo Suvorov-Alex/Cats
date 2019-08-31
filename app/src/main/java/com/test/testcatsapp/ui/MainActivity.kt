@@ -1,14 +1,14 @@
 package com.test.testcatsapp.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.test.testcatsapp.R
 import com.test.testcatsapp.ui.cats.photo.CatPhotoFragment
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
     private val navController by lazy { findNavController(R.id.catsNavHost) }
 
     private var skipItemSelectAction = false
