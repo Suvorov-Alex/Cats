@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.test.testcatsapp.R
 import java.io.File
@@ -43,10 +44,14 @@ class CatPhotoPresenter(
     private fun CatPhoto.SavingStatus.onPhotoSavingStatusReceived() =
         when (this) {
             is CatPhoto.SavingStatus.Success -> {
+                Log.d(TAG, "Cat photo saved successfully")
                 photo.showInGallery()
                 view?.showToast(R.string.cat_photo_download_success)
             }
-            is CatPhoto.SavingStatus.Error -> view?.showToast(R.string.cat_photo_download_error)
+            is CatPhoto.SavingStatus.Error -> {
+                Log.d(TAG, error.message)
+                view?.showToast(R.string.cat_photo_download_error)
+            }
         }
 
     private fun File.showInGallery() =
@@ -60,6 +65,7 @@ class CatPhotoPresenter(
         view?.requestPermissionsForResult(arrayOf(WRITE_EXTERNAL_STORAGE), PERMISSIONS_WRITE_EXTERNAL_STORAGE_CODE)
 
     companion object {
+        private const val TAG = "CatPhotoPresenter"
         private const val PERMISSIONS_WRITE_EXTERNAL_STORAGE_CODE = 1
     }
 }
