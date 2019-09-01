@@ -33,8 +33,20 @@ class MainActivity : DaggerAppCompatActivity() {
                             navigateFromFavoriteCatsToCats()
                         }
                     }
-                    R.id.catPhotoFragment -> navigateFromCatPhotoToFavoriteCats()
-                    R.id.favoriteCatPhotoFragment -> navigateFromFavoriteCatPhotoToCats()
+                    R.id.catPhotoFragment -> {
+                        if (menuItem.itemId == R.id.favoriteCatsMenuItem) {
+                            navigateFromCatPhotoToFavoriteCats()
+                        } else {
+                            onBackPressed()
+                        }
+                    }
+                    R.id.favoriteCatPhotoFragment -> {
+                        if (menuItem.itemId == R.id.catsMenuItem) {
+                            navigateFromFavoriteCatPhotoToCats()
+                        } else {
+                            onBackPressed()
+                        }
+                    }
                 }
             } else {
                 skipItemSelectAction = false
