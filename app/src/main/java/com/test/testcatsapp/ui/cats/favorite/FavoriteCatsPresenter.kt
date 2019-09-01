@@ -34,11 +34,11 @@ class FavoriteCatsPresenter(
         disposable.clear()
     }
 
-    @SuppressLint("CheckResult")
     override fun onCatClicked(cat: Cat) {
         view?.showFullImage(cat.imageUrl)
     }
 
+    @SuppressLint("CheckResult")
     override fun onCatLongClicked(cat: Cat) {
         model
             .deleteCatFromFavorite(cat)
@@ -78,6 +78,6 @@ class FavoriteCatsPresenter(
     }
 
     companion object {
-        private const val TAG = "FavoriteCatsModel"
+        private const val TAG = "FavoriteCatsPresenter"
     }
 }

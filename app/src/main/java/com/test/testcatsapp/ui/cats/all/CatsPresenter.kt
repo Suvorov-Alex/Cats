@@ -35,11 +35,11 @@ class CatsPresenter(
         disposable.clear()
     }
 
-    @SuppressLint("CheckResult")
     override fun onCatClicked(cat: Cat) {
         view?.showFullImage(cat.imageUrl)
     }
 
+    @SuppressLint("CheckResult")
     override fun onCatLongClicked(cat: Cat) {
         model
             .setCatFavorite(cat)
@@ -85,6 +85,6 @@ class CatsPresenter(
     }
 
     companion object {
-        private const val TAG = "CatsModel"
+        private const val TAG = "CatsPresenter"
     }
 }
