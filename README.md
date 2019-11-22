@@ -1,6 +1,6 @@
 Test app
 
-The app displays a list of cats. 
+The app shows a list of cats. 
 * Add cat's photo to favorites
 * Save cat's photo to device storage
 
