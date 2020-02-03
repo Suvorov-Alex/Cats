@@ -8,8 +8,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.ContextCompat
-import com.test.testcatsapp.ui.cats.photo.CatPhoto.View.DownloadPhotoResult
-
+import com.test.testcatsapp.R
 import java.io.File
 
 class CatPhotoPresenter(
@@ -33,41 +32,42 @@ class CatPhotoPresenter(
         fullPhoto = drawable
         if (drawable != null) {
             if (ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED) {
-                handleSavingStatus(model.savePhoto(drawable))
+                model.savePhoto(drawable).onPhotoSavingStatusReceived()
             } else {
                 onPermissionNotGranted()
             }
         } else {
-            view?.showToast(DownloadPhotoResult.ERROR)
+            view?.showToast(R.string.cat_photo_download_error)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == PERMISSIONS_WRITE_EXTERNAL_STORAGE_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
-                fullPhoto?.let { handleSavingStatus(model.savePhoto(it)) }
+                fullPhoto?.let { model.savePhoto(it).onPhotoSavingStatusReceived() }
             } else {
-                view?.showToast(DownloadPhotoResult.PERMISSION_ERROR)
+                view?.showToast(R.string.cat_photo_permission_error)
             }
         }
     }
 
-    private fun handleSavingStatus(status: CatPhoto.SavingStatus) =
-        when (status) {
+    private fun CatPhoto.SavingStatus.onPhotoSavingStatusReceived() =
+        when (this) {
             is CatPhoto.SavingStatus.Success -> {
-                showInGallery(status.photo)
-                view?.showToast(DownloadPhotoResult.SUCCESS)
+                Log.d(TAG, "Cat photo saved successfully")
+                photo.showInGallery()
+                view?.showToast(R.string.cat_photo_download_success)
             }
             is CatPhoto.SavingStatus.Error -> {
-                status.error.printStackTrace()
-                view?.showToast(DownloadPhotoResult.ERROR)
+                Log.d(TAG, error.message)
+                view?.showToast(R.string.cat_photo_download_error)
             }
         }
 
-    private fun showInGallery(photo: File) =
+    private fun File.showInGallery() =
         context.sendBroadcast(
             Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).apply {
-                data = Uri.fromFile(File(photo.absolutePath))
+                data = Uri.fromFile(File(this@showInGallery.absolutePath))
             }
         )
 
@@ -75,6 +75,7 @@ class CatPhotoPresenter(
         view?.requestPermissionsForResult(arrayOf(WRITE_EXTERNAL_STORAGE), PERMISSIONS_WRITE_EXTERNAL_STORAGE_CODE)
 
     companion object {
+        private const val TAG = "CatPhotoPresenter"
         private const val PERMISSIONS_WRITE_EXTERNAL_STORAGE_CODE = 1
     }
 }

@@ -15,12 +15,12 @@ interface Cats {
         fun showProgress()
         fun hideProgress()
 
-        fun showCats(cats: List<Cat>)
+        fun showContent(cats: List<Cat>)
         fun showEmptyView()
         fun showError()
         fun showFullImage(photoUrl: String)
 
-        fun showCatSavedToast()
+        fun showToast(@StringRes message: Int)
 
         fun stopRefreshing()
     }

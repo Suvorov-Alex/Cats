@@ -16,8 +16,14 @@ class CatsAdapter(
     private val onLongClickAction: (Cat) -> Boolean
 ) : RecyclerView.Adapter<CatsAdapter.CatsViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        CatsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.cat_item_view, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatsViewHolder =
+        CatsViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.cat_item_view,
+                parent,
+                false
+            )
+        )
 
     override fun onBindViewHolder(holder: CatsViewHolder, position: Int) =
         holder.bind(glide, cats[position], onClickAction, onLongClickAction)
@@ -25,11 +31,23 @@ class CatsAdapter(
     override fun getItemCount(): Int =
         cats.size
 
-    class CatsViewHolder(catItemView: View) : RecyclerView.ViewHolder(catItemView) {
-        fun bind(glide: RequestManager, cat: Cat, onClickAction: (Cat) -> Unit, onLongClickAction: (Cat) -> Boolean) {
-            itemView.setOnClickListener { onClickAction(cat) }
-            itemView.setOnLongClickListener { onLongClickAction(cat) }
-            glide.load(cat.imageUrl).centerCrop().into(itemView.catImageView)
+    class CatsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(
+            glide: RequestManager,
+            cat: Cat,
+            onClickAction: (Cat) -> Unit,
+            onLongClickAction: (Cat) -> Boolean
+        ) {
+
+            itemView.apply {
+                setOnClickListener { onClickAction(cat) }
+                setOnLongClickListener { onLongClickAction(cat) }
+            }
+
+            glide
+                .load(cat.imageUrl)
+                .centerCrop()
+                .into(itemView.catImageView)
         }
     }
 }
