@@ -6,7 +6,7 @@ import io.reactivex.Observable
 
 interface FavoriteCats {
     interface Model {
-        fun getCatsFromDb(): Observable<List<Cat>>
+        fun catsFromDb(): Observable<List<Cat>>
         fun deleteCatFromFavorite(cat: Cat): Completable
         fun saveFavoriteCat(cat: Cat): Completable
     }

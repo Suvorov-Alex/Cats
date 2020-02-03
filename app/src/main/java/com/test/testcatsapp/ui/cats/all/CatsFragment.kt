@@ -22,14 +22,10 @@ class CatsFragment : DaggerFragment(), Cats.View {
     @Inject
     lateinit var glide: RequestManager
 
-    private val dataSource = mutableListOf<Cat>()
+    private val cats = mutableListOf<Cat>()
     private var catsAdapter: CatsAdapter? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         inflater.inflate(R.layout.fragment_cats, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,7 +34,7 @@ class CatsFragment : DaggerFragment(), Cats.View {
         presenter.bind(this)
 
         catsRefreshView.setOnRefreshListener { presenter.onRefresh() }
-        catsAdapter = CatsAdapter(glide, dataSource, presenter::onCatClicked) { cat -> presenter.onCatLongClicked(cat); true }
+        catsAdapter = CatsAdapter(glide, cats, presenter::onCatClicked, ::onCatLongClicked)
         catsView.adapter = catsAdapter
     }
 
@@ -57,9 +53,9 @@ class CatsFragment : DaggerFragment(), Cats.View {
         catsProgressView.isVisible = false
     }
 
-    override fun showContent(cats: List<Cat>) {
-        dataSource.clear()
-        dataSource.addAll(cats)
+    override fun showCats(cats: List<Cat>) {
+        this.cats.clear()
+        this.cats.addAll(cats)
         catsAdapter?.notifyDataSetChanged()
 
         catsView.isVisible = true
@@ -83,17 +79,26 @@ class CatsFragment : DaggerFragment(), Cats.View {
 
     override fun showFullImage(photoUrl: String) {
         if (findNavController().currentDestination?.id == R.id.catsFragment) {
-            val photoBundle = Bundle().apply { putString("photoUrl", photoUrl) }
+            val photoBundle = Bundle().apply { putString(PHOTO_URL_BUNDLE_KEY, photoUrl) }
             findNavController().navigate(R.id.action_from_cats_to_cat_photo, photoBundle)
         }
     }
 
-    override fun showToast(message: Int) =
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    override fun showCatSavedToast() =
+        Toast.makeText(context, R.string.cats_view_save_to_favorite_toast, Toast.LENGTH_SHORT).show()
 
     override fun stopRefreshing() {
         if (catsRefreshView.isRefreshing) {
             catsRefreshView.isRefreshing = false
         }
+    }
+
+    private fun onCatLongClicked(cat: Cat): Boolean {
+        presenter.onCatLongClicked(cat)
+        return true
+    }
+
+    companion object {
+        const val PHOTO_URL_BUNDLE_KEY = "photoUrl"
     }
 }

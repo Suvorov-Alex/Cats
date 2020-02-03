@@ -9,11 +9,12 @@ import retrofit2.http.Query
 interface CatsApi {
 
     @GET("/v1/images/search")
-    fun getCats(
+    fun search(
         @Header(X_API_KEY_HEADER) header: String,
         @Query("limit") limit: Int?,
         @Query("page") page: Int?,
-        @Query("order") order: String?
+        @Query("order") order: String?,
+        @Query("mime_types") type: String?
     ): Single<List<Cat>>
 
     companion object {
