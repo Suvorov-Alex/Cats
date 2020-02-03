@@ -14,9 +14,8 @@ abstract class CatsDatabase : RoomDatabase() {
     abstract fun catsDao(): CatsDao
 
     companion object {
-        fun create(context: Context) =
-            Room
-                .databaseBuilder(context, CatsDatabase::class.java, "cats-db")
+        fun create(context: Context): CatsDatabase =
+            Room.databaseBuilder(context, CatsDatabase::class.java, "cats-db")
                 .build()
     }
 }

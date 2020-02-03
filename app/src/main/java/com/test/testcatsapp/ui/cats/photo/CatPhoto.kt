@@ -1,7 +1,6 @@
 package com.test.testcatsapp.ui.cats.photo
 
 import android.graphics.drawable.Drawable
-import androidx.annotation.StringRes
 import java.io.File
 
 interface CatPhoto {
@@ -10,7 +9,14 @@ interface CatPhoto {
     }
 
     interface View {
-        fun showToast(@StringRes message: Int)
+        enum class DownloadPhotoResult {
+            PERMISSION_ERROR,
+            ERROR,
+            SUCCESS
+        }
+
+        fun showToast(result: DownloadPhotoResult)
+
         fun requestPermissionsForResult(permissions: Array<String>, requestCode: Int)
     }
 

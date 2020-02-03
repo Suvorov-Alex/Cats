@@ -1,12 +1,10 @@
 package com.test.testcatsapp.ui.cats.favorite
 
-import android.annotation.SuppressLint
 import android.util.Log
+import com.test.testcatsapp.common.extensions.addTo
+import com.test.testcatsapp.common.extensions.applyUiSchedulers
 import com.test.testcatsapp.data.entity.Cat
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 
 class FavoriteCatsPresenter(
     private val model: FavoriteCats.Model
@@ -18,15 +16,10 @@ class FavoriteCatsPresenter(
     override fun bind(view: FavoriteCats.View) {
         this.view = view
 
-        model
-            .getCatsFromDb()
+        model.catsFromDb()
             .doOnSubscribe { view.showProgress() }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { cats -> onDataLoaded(cats) },
-                { error -> onErrorReceived(error) }
-            )
+            .applyUiSchedulers()
+            .subscribe(::onCatsLoaded, ::onCatsLoadingError)
             .addTo(disposable)
     }
 
@@ -38,31 +31,21 @@ class FavoriteCatsPresenter(
         view?.showFullImage(cat.imageUrl)
     }
 
-    @SuppressLint("CheckResult")
     override fun onCatLongClicked(cat: Cat) {
-        model
-            .deleteCatFromFavorite(cat)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { view?.showUndoDeleteCatSnackbar(cat) },
-                { error -> Log.d(TAG, error.message) }
-            )
+        model.deleteCatFromFavorite(cat)
+            .applyUiSchedulers()
+            .subscribe({ view?.showUndoDeleteCatSnackbar(cat) }, Throwable::printStackTrace)
+            .addTo(disposable)
     }
 
-    @SuppressLint("CheckResult")
     override fun onUndoDeleteCatClicked(cat: Cat) {
-        model
-            .saveFavoriteCat(cat)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { Log.d(TAG, "Cat $cat successfully deleted and added") },
-                { error -> Log.d(TAG, error.message) }
-            )
+        model.saveFavoriteCat(cat)
+            .applyUiSchedulers()
+            .subscribe({ Log.d(TAG, "Cat $cat successfully deleted and added") }, Throwable::printStackTrace)
+            .addTo(disposable)
     }
 
-    private fun onDataLoaded(cats: List<Cat>) {
+    private fun onCatsLoaded(cats: List<Cat>) {
         view?.hideProgress()
         if (cats.isEmpty()) {
             view?.showEmptyView()
@@ -71,8 +54,8 @@ class FavoriteCatsPresenter(
         }
     }
 
-    private fun onErrorReceived(error: Throwable) {
-        Log.d(TAG, error.message)
+    private fun onCatsLoadingError(error: Throwable) {
+        error.printStackTrace()
         view?.hideProgress()
         view?.showError()
     }

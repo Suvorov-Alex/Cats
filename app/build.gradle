@@ -60,7 +60,6 @@ dependencies {
     implementation gson
 
     implementation rxJava
-    implementation rxKotlin
     implementation rxAndroid
 
     implementation roomRuntime
